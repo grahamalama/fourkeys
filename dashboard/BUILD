@@ -1,0 +1,12 @@
+files(
+    sources=[
+        "*.yaml",
+        "fourkeys_dashboard.json",
+        "grafana.ini",
+    ]
+)
+docker_image(
+    name="img",
+    repository="fourkeys/dashboard",
+    dependencies=[":dashboard"]
+)

@@ -1,6 +1,0 @@
-Flask==3.0.3
-gunicorn==22.0.0
-google-cloud-bigquery==3.25.0
-cloudevents==1.2.0
-git+https://github.com/dora-team/fourkeys.git#egg=shared&subdirectory=shared
-protobuf==5.27.3

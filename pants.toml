@@ -1,0 +1,41 @@
+[GLOBAL]
+pants_version = "2.21.1"
+
+backend_packages = [
+  "pants.backend.docker",
+  "pants.backend.python",
+  "pants.backend.experimental.python.lint.ruff.check",
+  "pants.backend.experimental.python.lint.ruff.format",
+]
+
+[source]
+root_patterns = [
+  "/bq-workers/*",
+  "/dashboard",
+  "/event-handler",
+  "/setup/fourkeys-builder",
+  "/shared",
+  "/data-generator"
+]
+
+[python]
+enable_resolves = true
+interpreter_constraints = ["==3.12.*"]
+
+[python.resolves]
+python-default = "3rdparty/python/default.lock"
+
+[python-infer]
+ambiguity_resolution = "by_source_root"
+
+[pytest]
+install_from_resolve = "python-default"
+requirements = [
+  "//3rdparty/python#pytest",
+]
+
+[docker]
+use_buildx = true
+
+[environments-preview.names]
+linux = "//:linux"

@@ -24,12 +24,12 @@ ENV GF_AUTH_ANONYMOUS_ORG_ROLE "Admin"
 ENV BQ_REGION "US"
 
 # Setting grafana config
-COPY grafana.ini /etc/grafana
+COPY dashboard/grafana.ini /etc/grafana
 
 # Provisioning dashboards and datasources
-COPY fourkeys_dashboard.json /etc/grafana/dashboards/
-COPY dashboards.yaml /etc/grafana/provisioning/dashboards
-COPY datasource.yaml /etc/grafana/provisioning/datasources
+COPY dashboard/fourkeys_dashboard.json /etc/grafana/dashboards/
+COPY dashboard/dashboards.yaml /etc/grafana/provisioning/dashboards
+COPY dashboard/datasource.yaml /etc/grafana/provisioning/datasources
 
 # Installing the BigQuery Plugin
 RUN grafana-cli plugins install grafana-bigquery-datasource
