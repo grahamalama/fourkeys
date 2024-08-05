@@ -15,7 +15,8 @@ root_patterns = [
   "/event-handler",
   "/setup/fourkeys-builder",
   "/shared",
-  "/data-generator"
+  "/data-generator",
+  "/scripts"
 ]
 
 [python]

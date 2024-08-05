@@ -18,6 +18,7 @@ import os
 
 from google.cloud import secretmanager
 
+ENV = os.getenv("ENV", "PROD")
 PROJECT_NAME = os.environ.get("PROJECT_NAME")
 
 
@@ -39,7 +40,7 @@ def github_verification(signature, body):
     expected_signature = "sha1="
     try:
         # Get secret from Cloud Secret Manager
-        secret = get_secret(PROJECT_NAME, "event-handler", "latest")
+        secret = get_secret("event-handler")
         # Compute the hashed signature
         hashed = hmac.new(secret, body, sha1)
         expected_signature += hashed.hexdigest()
@@ -58,7 +59,7 @@ def circleci_verification(signature, body):
     expected_signature = "v1="
     try:
         # Get secret from Cloud Secret Manager
-        secret = get_secret(PROJECT_NAME, "event-handler", "latest")
+        secret = get_secret("event-handler")
         # Compute the hashed signature
         hashed = hmac.new(secret, body, 'sha256')
         expected_signature += hashed.hexdigest()
@@ -85,7 +86,7 @@ def pagerduty_verification(signatures, body):
     expected_signature = "v1="
     try:
         # Get secret from Cloud Secret Manager
-        secret = get_secret(PROJECT_NAME, "pager_duty_secret", "latest")
+        secret = get_secret("pager-duty")
 
         # Compute the hashed signature
         hashed = hmac.new(secret, body, sha256)
@@ -106,19 +107,32 @@ def simple_token_verification(token, body):
     """
     if not token:
         raise Exception("Token is empty")
-    secret = get_secret(PROJECT_NAME, "event-handler", "latest")
+    secret = get_secret("event-handler")
 
     return secret.decode() == token
 
 
-def get_secret(project_name, secret_name, version_num):
+def get_secret(secret_name):
+    if ENV == "LOCAL":
+        return get_secret_from_env(secret_name)
+    else:
+        return get_secret_from_google_cloud_manager(secret_name)
+
+
+def get_secret_from_env(secret_name: str):
+    secret_env_var = "SECRET_" + secret_name.upper().replace("-", "_")
+    secret = os.getenvb(secret_env_var)
+    return secret
+
+
+def get_secret_from_google_cloud_manager(secret_name: str):
     """
     Returns secret payload from Cloud Secret Manager
     """
     try:
         client = secretmanager.SecretManagerServiceClient()
         name = client.secret_version_path(
-            project_name, secret_name, version_num
+            PROJECT_NAME, secret_name, "latest"
         )
         secret = client.access_secret_version(name)
         return secret.payload.data

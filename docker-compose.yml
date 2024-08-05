@@ -1,0 +1,30 @@
+services:
+    event-parser:
+      image: fourkeys/event-handler
+      environment:
+        PORT: 8000
+        PROJECT_NAME: "fourkeys-local"
+        PUBSUB_EMULATOR_HOST: "pubsub-emulator:8085"
+        DEBUG: true
+        ENV: "LOCAL"
+        SECRET_EVENT_HANDLER: "dummy_secret_string"
+      ports:
+        - "8000:8000"
+    
+    github-parser:
+      image: fourkeys/github-parser
+      environment:
+        PORT: 8001
+        DEBUG: true
+
+    pubsub-emulator:
+      image: gcr.io/google.com/cloudsdktool/cloud-sdk:emulators
+      command: gcloud beta emulators pubsub start --project=fourkeys-local --host-port=0.0.0.0:8085
+      ports:
+        - "8085:8085"
+    
+    bigquery-emulator:
+      image: ghcr.io/goccy/bigquery-emulator
+      command: --project=fourkeys-local --dataset=four_keys
+      ports:
+        - "8085:8085"

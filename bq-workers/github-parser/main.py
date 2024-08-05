@@ -55,7 +55,7 @@ def index():
                 event = process_github_event(headers, msg)
 
         shared.insert_row_into_bigquery(event)
-
+    
     except Exception as e:
         entry = {
                 "severity": "WARNING",
@@ -72,7 +72,7 @@ def process_github_event(headers, msg):
     event_type = headers["X-Github-Event"]
     signature = headers["X-Hub-Signature"]
     source = "github"
-
+ 
     if "Mock" in headers:
         source += "mock"
 
