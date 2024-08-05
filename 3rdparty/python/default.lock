@@ -11,6 +11,7 @@
 //   "generated_with_requirements": [
 //     "Flask==3.0.3",
 //     "cloudevents==1.2.0",
+//     "google-api-core==2.19.1",
 //     "google-cloud-bigquery==3.25.0",
 //     "google-cloud-pubsub==2.23.0",
 //     "google-cloud-secret-manager==2.20.2",
@@ -1077,6 +1078,7 @@
   "requirements": [
     "Flask==3.0.3",
     "cloudevents==1.2.0",
+    "google-api-core==2.19.1",
     "google-cloud-bigquery==3.25.0",
     "google-cloud-pubsub==2.23.0",
     "google-cloud-secret-manager==2.20.2",
